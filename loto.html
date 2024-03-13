@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOTO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 100px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 24px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .firework {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            animation: explode 1s ease-out;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .winningNumber {
+            color: #007bff;  /* Couleur rouge pour le numéro gagnant */
+            font-weight: bold;
+            font-size: 50px;
+            display: block; /* Forcer le numéro à revenir à la ligne */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LOTO 2023</h1> <!-- Titre de la page -->
+        <img id ="logo"  src="logo.webp" alt="logo">
+        <p id="message">Cliquez pour commencer le tirage!</p> <!-- Paragraphe affichant le message -->
+        <button id="drawButton">Tirer un numéro</button> <!-- Bouton pour tirer un numéro -->
+        <div id="fireworks"></div> <!-- Conteneur pour l'animation de feu d'artifice -->
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Lien vers jQuery -->
+    <script>
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        $(document).ready(function() {
+            $("#drawButton").click(function() {
+                startCountdown();
+            });
+        });
+
+        function startCountdown() {
+            var remainingTime = 3; // 3 secondes"
+            var messageElement = $("#message");
+            messageElement.text("ça tourne.." + remainingTime + " secondes...");
+
+            var countdownInterval = setInterval(function() {
+                remainingTime--;
+                if (remainingTime > 0) {
+                    messageElement.text("ça tourne.." + remainingTime + " secondes...");
+                } else {
+                    clearInterval(countdownInterval);
+                    showWinner();
+                }
+            }, 1000);
+        }
+
+        function showWinner() {
+            var messageElement = $("#message");
+            messageElement.text("Le numéro tiré est le : ");
+
+            var winningNumber = Math.floor(Math.random() * 69) + 1;
+            messageElement.append(`<span class="winningNumber">${winningNumber}</span>`);
+
+            // Animation de feu d'artifice
+            animateFireworks();
+        }
+
+        function animateFireworks() {
+            var fireworksContainer = $("#fireworks");
+
+            // Création de nombreux divs avec la classe "firework"
+            for (var i = 0; i < 100; i++) {
+                var firework = $("<div></div>").addClass("firework");
+                fireworksContainer.append(firework);
+
+                // Génération de couleurs aléatoires pour chaque feu d'artifice
+                var color = getRandomColor();
+                firework.css("background-color", color);
+            }
+
+            // Animation de chaque div "firework"
+            $(".firework").each(function() {
+                var firework = $(this);
+                var x = Math.random() * 100; // Position horizontale aléatoire
+                var y = Math.random() * 100; // Position verticale aléatoire
+                var size = Math.random() * 20 + 5; // Taille aléatoire
+                var duration = Math.random() * 4 + 1; // Durée de l'animation aléatoire (augmentée)
+
+                // Animation de la translation et de l'opacité
+                firework.css({
+                    "left": x + "%",
+                    "top": y + "%",
+                    "width": size + "px",
+                    "height": size + "px",
+                    "animation-duration": duration + "s" // Durée de l'animation augmentée
+                });
+
+                // Suppression de l'élément après l'animation
+                firework.on("animationend", function() {
+                    firework.remove();
+                });
+            });
+        }
+    </script>
+</body>
+</html>
