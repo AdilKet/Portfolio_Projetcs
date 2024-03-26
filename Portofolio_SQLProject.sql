@@ -1,7 +1,7 @@
 SELECT
 	*
 FROM 
-	PortofolioProjet..CovidDeaths
+	PortofolioProjet.CovidDeaths
 WHERE
 	continent is not NULL 
 
@@ -28,8 +28,8 @@ FROM
 ORDER BY
 	1,2
 
---explorer le Total des cas VS Total des decès
--- pourcentage des decès des personnes touchées pas le Covid
+--explorer le Total des cas VS Total des decÃ¨s
+-- pourcentage des decÃ¨s des personnes touchÃ©es pas le Covid
 
 --SELECT location, date, total_cases, total_deaths, (total_deaths/ total_cases)
 
@@ -66,8 +66,8 @@ FROM
 ORDER BY
 	1,2
 
---Explorer les pays les plus impactées 
---Pourcentage impacté de la population 
+--Explorer les pays les plus impactÃ©es 
+--Pourcentage impactÃ© de la population 
 
 SELECT
 	Location, 
@@ -84,7 +84,7 @@ GROUP BY
 ORDER BY 
 	percent_population_infected DESC
 
--- Pays avec le max de nbr de decès par population 
+-- Pays avec le max de nbr de decÃ¨s par population 
 
 SELECT 
     Location, 
@@ -100,8 +100,8 @@ ORDER BY
     total_death_count DESC
 
 	
--- Explorer les données par Continent 
--- Les continents avec plus de decès par population 
+-- Explorer les donnÃ©es par Continent 
+-- Les continents avec plus de decÃ¨s par population 
 SELECT 
    continent, 
     MAX(CAST(NULLIF(ISNULL(REPLACE(total_deaths, '.', ''), ''), 'NA') AS INT)) AS total_death_count
@@ -118,7 +118,7 @@ ORDER BY
 -- SOMMES DES DONNEES
 
 SELECT
-    SUM(CAST(new_cases AS float)) AS total_cases, -- quand c'est un chiffre Float pour chiffre avec décimale
+    SUM(CAST(new_cases AS float)) AS total_cases, -- quand c'est un chiffre Float pour chiffre avec dÃ©cimale
     SUM(CAST(new_deaths AS float)) AS total_deaths, 
     CASE WHEN SUM(CAST(new_cases AS float)) > 0 
          THEN (SUM(CAST(new_deaths AS float)) / SUM(CAST(new_cases AS float))) * 100 
@@ -145,7 +145,7 @@ JOIN
 	AND
 		dea.date = vac.date;
 
--- Nbr Total de personnes vaccinées dans le monde 
+-- Nbr Total de personnes vaccinÃ©es dans le monde 
 
 SELECT
 	 dea.continent,
@@ -153,7 +153,7 @@ SELECT
 	 dea.date, 
 	 dea.population,
 	 vac.new_vaccinations,
-	 SUM(CAST (vac.new_vaccinations AS float)) OVER ( PARTITION BY dea.location ORDER BY dea.location, dea.date )-- SUM calculée par location, et trié par locatione & date
+	 SUM(CAST (vac.new_vaccinations AS float)) OVER ( PARTITION BY dea.location ORDER BY dea.location, dea.date )-- SUM calculÃ©e par location, et triÃ© par locatione & date
 							AS rolling_people_vaccinated
 FROM
 	PortofolioProjet..CovidDeaths   dea
@@ -168,7 +168,7 @@ WHERE
 	--AND	dea.location = 'canada'
 	--AND dea.location ='Albania'
 
--- vaccinés par location 
+-- vaccinÃ©s par location 
 --creation d'abord d'un CTE = une table temporaire
 WITH PopVsVac AS ( 
     SELECT
@@ -241,7 +241,7 @@ SELECT *
 FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_NAME = 'PercentPopulationVaccinated';
 
--- Recherche des procédures stockées avec le nom 'PercentPopulationVaccinated'
+-- Recherche des procÃ©dures stockÃ©es avec le nom 'PercentPopulationVaccinated'
 SELECT *
 FROM INFORMATION_SCHEMA.ROUTINES
 WHERE ROUTINE_NAME = 'PercentPopulationVaccinated';
